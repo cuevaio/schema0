@@ -6,7 +6,17 @@
     "useIgnoreFile": false
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "includes": [
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.js",
+      "src/**/*.jsx",
+      "biome.json",
+      "next.config.ts",
+      "drizzle.config.ts",
+      "package.json"
+    ]
   },
   "formatter": {
     "enabled": true,
