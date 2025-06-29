@@ -115,10 +115,7 @@ export function User() {
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-destructive focus:text-destructive"
-          onClick={handleSignOut}
-        >
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOutIcon className="mr-2 h-4 w-4" />
           <span>Sign out</span>
         </DropdownMenuItem>
