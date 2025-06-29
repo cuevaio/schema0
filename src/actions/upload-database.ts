@@ -4,7 +4,7 @@ import { type DatabaseInsert, database, db } from "@/database";
 import { getDBName, getDBSchema, getDBSchemas } from "@/lib/db";
 import { nanoid } from "@/lib/nanoid";
 
-type UploadDatabaseActionState = {
+export type UploadDatabaseActionState = {
   input: {
     connectionString?: string;
   };
@@ -13,6 +13,7 @@ type UploadDatabaseActionState = {
         success: true;
         data: {
           id: string;
+          firstSchema?: string;
         };
       }
     | {
@@ -72,6 +73,7 @@ export async function uploadDatabaseAction(
       success: true,
       data: {
         id,
+        firstSchema: schemasWithTables[0].name,
       },
     };
   } catch (error) {

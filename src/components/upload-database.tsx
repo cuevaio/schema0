@@ -3,7 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { uploadDatabaseAction } from "@/actions/upload-database";
+import {
+  type UploadDatabaseActionState,
+  uploadDatabaseAction,
+} from "@/actions/upload-database";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,23 +17,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-type UploadDatabaseActionState = {
-  input: {
-    connectionString?: string;
-  };
-  output:
-    | {
-        success: true;
-        data: {
-          id: string;
-        };
-      }
-    | {
-        success: false;
-        error?: string;
-      };
-};
 
 const initialState: UploadDatabaseActionState = {
   input: {
@@ -52,7 +38,9 @@ export function UploadDatabase() {
   useEffect(() => {
     if (state.output.success && state.output.data?.id) {
       toast.success("Database uploaded successfully!");
-      router.push(`/${state.output.data.id}`);
+      router.push(
+        `/${state.output.data.id}/${state.output.data.firstSchema ?? ""}`,
+      );
     } else if (!state.output.success && state.output.error) {
       toast.error(state.output.error);
     }
