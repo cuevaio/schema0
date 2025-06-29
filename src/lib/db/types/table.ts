@@ -1,4 +1,4 @@
-export type DBTable = {
+export type SchemaTable = {
   name: string;
   columns: {
     name: string;

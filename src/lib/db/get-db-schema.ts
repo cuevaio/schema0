@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { selectColumns, selectColumnsConstrains, selectRelations } from "./sql";
-import type { DBTable } from "./types";
+import type { SchemaTable } from "./types";
 
 export async function getDBSchema(connectionString: string, schema: string) {
   const sqlClient = neon(connectionString);
@@ -43,7 +43,7 @@ export async function getDBSchema(connectionString: string, schema: string) {
     referenced_column: string;
   }[];
 
-  const tables: DBTable[] = columns.reduce((acc, dbColumn) => {
+  const tables: SchemaTable[] = columns.reduce((acc, dbColumn) => {
     const table = acc.find((t) => t.name === dbColumn.table_name);
 
     const constrains = columnConstrains.filter(
@@ -75,7 +75,7 @@ export async function getDBSchema(connectionString: string, schema: string) {
     }
 
     return acc;
-  }, [] as DBTable[]);
+  }, [] as SchemaTable[]);
 
   tables.forEach((t) => {
     t.columns.sort((a, b) => a.ordinalPosition - b.ordinalPosition);
