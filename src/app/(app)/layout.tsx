@@ -28,7 +28,10 @@ export default function DatabaseLayout({
             rel="noopener noreferrer"
             className={buttonVariants({ variant: "ghost", size: "icon" })}
           >
-            <GithubIcon className="size-4" />
+            <GithubIcon
+              className="size-4 text-muted-foreground"
+              fill="currentColor"
+            />
           </a>
         </div>
         <div className="flex items-center gap-4">
@@ -37,6 +40,17 @@ export default function DatabaseLayout({
         </div>
       </div>
       {children}
+      <p className="text-center text-muted-foreground text-sm">
+        made with ❤️ by cursor and{" "}
+        <a
+          href="https://cueva.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          cueva.io
+        </a>
+      </p>
     </div>
   );
 }
