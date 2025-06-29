@@ -11,9 +11,7 @@ export type Schema = {
 export const database = pgTable("database", {
   id: varchar("id", { length: 12 }).primaryKey(),
 
-  userId: varchar("user_id", { length: 12 })
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
 
   name: text("name").notNull(),
   description: text("description").notNull(),

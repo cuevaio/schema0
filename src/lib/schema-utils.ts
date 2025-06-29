@@ -1,4 +1,4 @@
-import type { DBTable } from "./db/types";
+import type { SchemaTable } from "./db/types";
 
 export const getBadgeColor = (dataType: string) => {
   switch (dataType?.toLowerCase()) {
@@ -28,7 +28,9 @@ export const getBadgeColor = (dataType: string) => {
   }
 };
 
-export const getEnumLength = (column: Partial<DBTable["columns"][number]>) => {
+export const getEnumLength = (
+  column: Partial<SchemaTable["columns"][number]>,
+) => {
   if (!column.dataType) return 0;
   return column.dataType
     ?.split("|")
