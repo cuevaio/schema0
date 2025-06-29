@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/performance/noImgElement: <images are required> */
 "use client";
 
 import {
