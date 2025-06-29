@@ -124,7 +124,7 @@ export default function SignIn() {
                 await authClient.signIn.social(
                   {
                     provider: "github",
-                    callbackURL: "/dashboard",
+                    callbackURL: "/",
                   },
                   {
                     onRequest: (_ctx) => {
