@@ -23,3 +23,4 @@ export const database = pgTable("database", {
 });
 
 export type DatabaseSelect = typeof database.$inferSelect;
+export type DatabaseInsert = typeof database.$inferInsert;
