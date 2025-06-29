@@ -91,7 +91,7 @@ export function DatabaseSchemaSelector() {
 
   if (error || !databases || databases.length === 0) {
     return (
-      <div className="mb-6">
+      <div>
         <p className="text-muted-foreground text-sm">
           {error ? "Failed to load databases" : "No databases found"}
         </p>

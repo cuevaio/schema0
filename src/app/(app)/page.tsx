@@ -3,7 +3,7 @@ import { getDBSchema } from "@/lib/db";
 
 export default async function Home() {
   const { tables, relations } = await getDBSchema(
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    // biome-ignore lint/style/noNonNullAssertion: Already set in .env.local
     process.env.DATABASE_URL!,
     "public",
   );
@@ -16,7 +16,7 @@ export default async function Home() {
           You are currently viewing the public schema of the actual schema0
           database.
         </p>
-        <p>Upload your own database to visualize its schema.</p>
+        <p>Upload your own database to visualize its schema ↗</p>
       </div>
       <SchemaVisualizer tables={tables} relations={relations} />
     </div>
