@@ -11,8 +11,8 @@ export default function DatabaseLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex items-start justify-between">
+    <div className="container mx-auto px-4 pb-8">
+      <div className="sticky top-0 z-10 flex items-start justify-between bg-background py-4">
         <div className="flex items-center gap-2">
           <Link href="/">
             <div className="flex size-9 items-center justify-center rounded-lg bg-primary">
@@ -22,6 +22,9 @@ export default function DatabaseLayout({
             </div>
           </Link>
           <DatabaseSchemaSelector />
+          <UploadDatabase />
+        </div>
+        <div className="flex items-center gap-4">
           <a
             href="https://github.com/cuevaio/schema0"
             target="_blank"
@@ -33,14 +36,11 @@ export default function DatabaseLayout({
               fill="currentColor"
             />
           </a>
-        </div>
-        <div className="flex items-center gap-4">
-          <UploadDatabase />
           <User />
         </div>
       </div>
       {children}
-      <p className="text-center text-muted-foreground text-sm">
+      <p className="mt-8 text-center text-muted-foreground text-sm">
         made with ❤️ by cursor and{" "}
         <a
           href="https://cueva.io"

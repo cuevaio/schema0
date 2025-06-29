@@ -26,12 +26,10 @@ export default async function DatabasePage({
   }
 
   return (
-    <div className="mt-4">
-      <SchemaVisualizer
-        tables={schemaRecord.tables}
-        relations={schemaRecord.relations}
-      />
-    </div>
+    <SchemaVisualizer
+      tables={schemaRecord.tables}
+      relations={schemaRecord.relations}
+    />
   );
 }
 
