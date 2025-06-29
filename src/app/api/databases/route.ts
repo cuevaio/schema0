@@ -4,6 +4,12 @@ import { getUserId } from "@/auth";
 import { db } from "@/database";
 import { database } from "@/database/schema/database";
 
+export type Database = {
+  id: string;
+  name: string;
+  schemas: string[];
+};
+
 export async function GET(request: Request) {
   const { userId, isAnonymous } = await getUserId(request.headers);
 
@@ -16,8 +22,6 @@ export async function GET(request: Request) {
   const result = databases.map((db) => ({
     id: db.id,
     name: db.name,
-    createdAt: db.createdAt,
-    updatedAt: db.updatedAt,
     schemas: db.schemas.map((schema) => schema.name),
   }));
 

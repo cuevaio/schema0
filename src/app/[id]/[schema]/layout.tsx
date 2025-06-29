@@ -1,19 +1,18 @@
-import { eq } from "drizzle-orm";
-import { db } from "@/database";
-import { database } from "@/database/schema/database";
+import { DatabaseSchemaSelector } from "@/components/database-schema-selector";
+import { UploadDatabase } from "@/components/upload-database";
 
-export default async function DatabaseLayout({
+export default function DatabaseLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ id: string; schema: string }>;
 }) {
-  const { id, schema } = await params;
-
-  const _dbRecord = await db.query.database.findFirst({
-    where: eq(database.id, id),
-  });
-
-  return <div>{children}</div>;
+  return (
+    <div className="container mx-auto p-6">
+      <div className="mb-6 flex items-start justify-between">
+        <DatabaseSchemaSelector />
+        <UploadDatabase />
+      </div>
+      {children}
+    </div>
+  );
 }

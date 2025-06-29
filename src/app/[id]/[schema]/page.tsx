@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { SchemaSelector } from "@/components/schema-selector";
 import { SchemaVisualizer } from "@/components/schema-visualizer";
 import { db } from "@/database";
 import { database } from "@/database/schema/database";
@@ -27,16 +26,9 @@ export default async function DatabasePage({
   }
 
   return (
-    <div>
-      <SchemaSelector
-        schemas={dbRecord.schemas}
-        currentSchema={schema}
-        databaseId={id}
-      />
-      <SchemaVisualizer
-        tables={schemaRecord.tables}
-        relations={schemaRecord.relations}
-      />
-    </div>
+    <SchemaVisualizer
+      tables={schemaRecord.tables}
+      relations={schemaRecord.relations}
+    />
   );
 }
