@@ -1,0 +1,1 @@
+ALTER TABLE "database" ADD COLUMN "anonymous_user_id" text;
