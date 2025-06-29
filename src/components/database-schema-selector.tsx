@@ -46,6 +46,16 @@ export function DatabaseSchemaSelector() {
     }
   }, [databases, currentDatabaseId, currentSchema]);
 
+  useEffect(() => {
+    if (databases) {
+      databases.forEach((db) => {
+        db.schemas.forEach((schema) => {
+          router.prefetch(`/${db.id}/${schema}`);
+        });
+      });
+    }
+  }, [databases, router]);
+
   // Handle database selection
   const handleDatabaseChange = (databaseId: string) => {
     setSelectedDatabaseId(databaseId);

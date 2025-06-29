@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
@@ -38,6 +39,7 @@ export function UploadDatabase() {
     uploadDatabaseAction,
     initialState,
   );
+  const queryClient = useQueryClient();
 
   // Handle success redirect and toast messages
   useEffect(() => {
@@ -47,10 +49,11 @@ export function UploadDatabase() {
       router.push(
         `/${state.output.data.id}/${state.output.data.firstSchema ?? ""}`,
       );
+      queryClient.invalidateQueries({ queryKey: ["databases"] });
     } else if (!state.output.success && state.output.error) {
       toast.error(state.output.error);
     }
-  }, [state.output, router]);
+  }, [state.output, router, queryClient]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

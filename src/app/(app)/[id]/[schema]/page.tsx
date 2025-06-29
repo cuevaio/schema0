@@ -32,3 +32,11 @@ export default async function DatabasePage({
     />
   );
 }
+
+export async function generateStaticParams() {
+  return [];
+}
+
+export const revalidate = 300;
+export const dynamic = "force-static";
+export const dynamicParams = true;
