@@ -12,7 +12,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import "@xyflow/react/dist/style.css";
 import { LayoutGroup, motion } from "motion/react";
-import type { DBRelation, DBTable } from "@/lib/db/types";
+import type { SchemaRelation, SchemaTable } from "@/lib/db/types";
 import { cn } from "@/lib/utils";
 import { FullScreenButton } from "../full-screen-button";
 import { getLayoutedElements, nodeDefaults } from "./layout-utils";
@@ -22,8 +22,8 @@ export const SchemaVisualizer = ({
   tables,
   relations,
 }: {
-  tables: DBTable[];
-  relations: DBRelation[];
+  tables: SchemaTable[];
+  relations: SchemaRelation[];
 }) => {
   const flowInstance = useReactFlow();
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -47,7 +47,7 @@ export const SchemaVisualizer = ({
           type: "dbTable",
           data: table,
           ...nodeDefaults,
-        } as Node<DBTable>;
+        } as Node<SchemaTable>;
       }),
       relations.map(
         ({

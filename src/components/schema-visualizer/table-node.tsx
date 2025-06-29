@@ -25,7 +25,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { DBTable } from "@/lib/db/types";
+import type { SchemaTable } from "@/lib/db/types";
 import { getBadgeColor } from "@/lib/schema-utils";
 import { cn } from "@/lib/utils";
 import { MAX_ENUM_LENGTH_DESKTOP, MAX_ENUM_LENGTH_MOBILE } from "./constants";
@@ -36,7 +36,7 @@ const DBTableNode = ({
   data: { name, columns },
   targetPosition,
   sourcePosition,
-}: Node<DBTable>) => {
+}: Node<SchemaTable>) => {
   const hiddenNodeConnector =
     "!h-px !w-px !min-w-0 !min-h-0 !cursor-grab !border-0 !opacity-0";
 

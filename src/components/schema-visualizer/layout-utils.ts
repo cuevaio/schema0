@@ -1,6 +1,6 @@
 import dagre from "@dagrejs/dagre";
 import { type Edge, type Node, Position } from "@xyflow/react";
-import type { DBTable } from "@/lib/db/types";
+import type { SchemaTable } from "@/lib/db/types";
 
 export const TABLE_NODE_WIDTH = 800;
 export const TABLE_NODE_ROW_HEIGHT = 80;
@@ -10,7 +10,10 @@ export const nodeDefaults = {
   targetPosition: Position.Left,
 };
 
-export const getLayoutedElements = (nodes: Node<DBTable>[], edges: Edge[]) => {
+export const getLayoutedElements = (
+  nodes: Node<SchemaTable>[],
+  edges: Edge[],
+) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({
