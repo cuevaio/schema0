@@ -88,7 +88,7 @@ export function UploadDatabase() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" form="upload-form" disabled={isPending}>
+            <Button type="submit" form="add-database-form" disabled={isPending}>
               {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
               Add database
             </Button>

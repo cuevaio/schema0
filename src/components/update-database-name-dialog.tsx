@@ -70,7 +70,11 @@ export function UpdateDatabaseNameDialog() {
             Change the name of your database and current schema.
           </DialogDescription>
         </DialogHeader>
-        <form action={formAction} className="space-y-4">
+        <form
+          id="update-database-name-form"
+          action={formAction}
+          className="space-y-4"
+        >
           <input type="hidden" name="databaseId" defaultValue={params.id} />
           <input
             type="hidden"
@@ -100,23 +104,24 @@ export function UpdateDatabaseNameDialog() {
           {state.output.success === false && "error" in state.output && (
             <p className="text-destructive text-sm">{state.output.error}</p>
           )}
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Update Names"
-              )}
-            </Button>
-          </DialogFooter>
         </form>
+        <DialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            form="update-database-name-form"
+            disabled={isPending}
+          >
+            {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+            Update Names
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
