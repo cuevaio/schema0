@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -16,10 +16,14 @@ import { useDatabases } from "@/hooks/useDatabases";
 export function DatabaseSchemaSelector() {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const { data: databases, isLoading, error } = useDatabases();
 
   const [selectedDatabaseId, setSelectedDatabaseId] = useState<string>("");
   const [selectedSchema, setSelectedSchema] = useState<string>("");
+
+  // Check if we're at the root path
+  const isAtRoot = pathname === "/";
 
   // Get current database and schema from URL params
   const currentDatabaseId = params.id as string;
@@ -27,7 +31,11 @@ export function DatabaseSchemaSelector() {
 
   // Set initial values when data loads
   useEffect(() => {
-    if (databases && databases.length > 0) {
+    if (isAtRoot) {
+      // At root path, show default schema0 database with public schema
+      setSelectedDatabaseId("schema0");
+      setSelectedSchema("public");
+    } else if (databases && databases.length > 0) {
       // If we have a current database in URL, use it; otherwise use first database
       const initialDatabaseId = currentDatabaseId || databases[0].id;
       setSelectedDatabaseId(initialDatabaseId);
@@ -44,7 +52,7 @@ export function DatabaseSchemaSelector() {
         setSelectedSchema(initialSchema);
       }
     }
-  }, [databases, currentDatabaseId, currentSchema]);
+  }, [databases, currentDatabaseId, currentSchema, isAtRoot]);
 
   useEffect(() => {
     if (databases) {
@@ -60,14 +68,20 @@ export function DatabaseSchemaSelector() {
   const handleDatabaseChange = (databaseId: string) => {
     setSelectedDatabaseId(databaseId);
 
-    // Find the selected database and get its first schema
-    const selectedDb = databases?.find((db) => db.id === databaseId);
-    if (selectedDb && selectedDb.schemas.length > 0) {
-      const firstSchema = selectedDb.schemas[0];
-      setSelectedSchema(firstSchema);
+    if (databaseId === "schema0") {
+      // If selecting schema0, go to root with public schema
+      setSelectedSchema("public");
+      router.push("/");
+    } else {
+      // Find the selected database and get its first schema
+      const selectedDb = databases?.find((db) => db.id === databaseId);
+      if (selectedDb && selectedDb.schemas.length > 0) {
+        const firstSchema = selectedDb.schemas[0];
+        setSelectedSchema(firstSchema);
 
-      // Redirect to the new database/schema
-      router.push(`/${databaseId}/${firstSchema}`);
+        // Redirect to the new database/schema
+        router.push(`/${databaseId}/${firstSchema}`);
+      }
     }
   };
 
@@ -75,8 +89,13 @@ export function DatabaseSchemaSelector() {
   const handleSchemaChange = (schema: string) => {
     setSelectedSchema(schema);
 
-    // Redirect to the selected schema
-    router.push(`/${selectedDatabaseId}/${schema}`);
+    if (selectedDatabaseId === "schema0") {
+      // If schema0 database, go to root
+      router.push("/");
+    } else {
+      // Redirect to the selected schema
+      router.push(`/${selectedDatabaseId}/${schema}`);
+    }
   };
 
   if (isLoading) {
@@ -89,17 +108,15 @@ export function DatabaseSchemaSelector() {
     );
   }
 
-  if (error || !databases || databases.length === 0) {
-    return (
-      <div>
-        <p className="text-muted-foreground text-sm">
-          {error ? "Failed to load databases" : "No databases found"}
-        </p>
-      </div>
-    );
-  }
+  // Show schema0 database even if no user databases exist
+  const availableDatabases = [
+    { id: "schema0", name: "schema0", schemas: ["public"] },
+    ...(databases || []),
+  ];
 
-  const selectedDb = databases.find((db) => db.id === selectedDatabaseId);
+  const selectedDb = availableDatabases.find(
+    (db) => db.id === selectedDatabaseId,
+  );
 
   return (
     <div className="flex items-center gap-2">
@@ -108,7 +125,7 @@ export function DatabaseSchemaSelector() {
           <SelectValue placeholder="Database" />
         </SelectTrigger>
         <SelectContent>
-          {databases.map((database) => (
+          {availableDatabases.map((database) => (
             <SelectItem key={database.id} value={database.id}>
               {database.name}
             </SelectItem>
