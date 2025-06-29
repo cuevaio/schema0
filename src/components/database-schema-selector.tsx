@@ -17,7 +17,7 @@ export function DatabaseSchemaSelector() {
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
-  const { data: databases, isLoading, error } = useDatabases();
+  const { data: databases, isLoading } = useDatabases();
 
   const [selectedDatabaseId, setSelectedDatabaseId] = useState<string>("");
   const [selectedSchema, setSelectedSchema] = useState<string>("");
