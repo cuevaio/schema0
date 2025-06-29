@@ -12,6 +12,7 @@ export const database = pgTable("database", {
   id: varchar("id", { length: 12 }).primaryKey(),
 
   userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+  anonymousUserId: text("anonymous_user_id"),
 
   name: text("name").notNull(),
   description: text("description").notNull(),

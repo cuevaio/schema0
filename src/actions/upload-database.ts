@@ -1,5 +1,7 @@
 "use server";
 
+import { headers } from "next/headers";
+import { getUserId } from "@/auth";
 import { type DatabaseInsert, database, db } from "@/database";
 import { getDBName, getDBSchema, getDBSchemas } from "@/lib/db";
 import { nanoid } from "@/lib/nanoid";
@@ -45,6 +47,7 @@ export async function uploadDatabaseAction(
     return state;
   }
 
+  const { userId, isAnonymous } = await getUserId(await headers());
   try {
     const dbName = await getDBName(connectionString);
     let schemas = await getDBSchemas(connectionString);
@@ -67,6 +70,8 @@ export async function uploadDatabaseAction(
       name: dbName,
       description: "Uploaded database",
       schemas: schemasWithTables,
+      userId: isAnonymous ? undefined : userId,
+      anonymousUserId: isAnonymous ? userId : undefined,
     } satisfies DatabaseInsert);
 
     state.output = {
