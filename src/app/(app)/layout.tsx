@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DatabaseSchemaSelector } from "@/components/database-schema-selector";
 import { buttonVariants } from "@/components/ui/button";
 import { GithubIcon } from "@/components/ui/icons/github";
+import { UpdateDatabaseNameDialog } from "@/components/update-database-name-dialog";
 import { UploadDatabase } from "@/components/upload-database";
 import { User } from "@/components/user";
 
@@ -22,6 +23,8 @@ export default function DatabaseLayout({
             </div>
           </Link>
           <DatabaseSchemaSelector />
+          <UpdateDatabaseNameDialog />
+          <div></div>
           <UploadDatabase />
         </div>
         <div className="flex items-center gap-4">

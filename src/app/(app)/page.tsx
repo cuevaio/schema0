@@ -16,7 +16,7 @@ export default async function Home() {
           You are currently viewing the public schema of the actual schema0
           database.
         </p>
-        <p>Upload your own database to visualize its schema ↗</p>
+        <p>Upload your own database to visualize its schema ↖</p>
       </div>
       <SchemaVisualizer tables={tables} relations={relations} />
     </div>

@@ -1,9 +1,9 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { PlusIcon } from "lucide-react";
+import { Loader2, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import React from "react";
 import { toast } from "sonner";
 import {
   type UploadDatabaseActionState,
@@ -30,19 +30,19 @@ const initialState: UploadDatabaseActionState = {
   output: {
     success: false,
   },
-};
+} as const;
 
 export function UploadDatabase() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [state, formAction, isPending] = useActionState(
+  const [open, setOpen] = React.useState(false);
+  const [state, formAction, isPending] = React.useActionState(
     uploadDatabaseAction,
     initialState,
   );
   const queryClient = useQueryClient();
 
   // Handle success redirect and toast messages
-  useEffect(() => {
+  React.useEffect(() => {
     if (state.output.success && state.output.data?.id) {
       toast.success("Database uploaded successfully!");
       setOpen(false); // Close the dialog on success
@@ -64,13 +64,13 @@ export function UploadDatabase() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Upload Database</DialogTitle>
+          <DialogTitle>Add Database</DialogTitle>
           <DialogDescription>
-            Enter your database connection string to upload and visualize your
-            schema
+            Enter your database connection string to add a new database to your
+            account
           </DialogDescription>
         </DialogHeader>
-        <form id="upload-form" action={formAction} className="space-y-4">
+        <form id="add-database-form" action={formAction} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="connectionString">Connection String</Label>
             <Input
@@ -89,14 +89,8 @@ export function UploadDatabase() {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="submit" form="upload-form" disabled={isPending}>
-              {isPending ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-white border-b-2"></div>
-                  Uploading...
-                </>
-              ) : (
-                "Upload Database"
-              )}
+              {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+              Add database
             </Button>
           </div>
         </DialogFooter>
