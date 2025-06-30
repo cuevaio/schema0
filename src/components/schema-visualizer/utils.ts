@@ -1,6 +1,9 @@
 import type { SchemaTable } from "@/lib/db/types";
 import { extendedDataTypeMap } from "./constants";
 
+export * from "./utils/highlight-nodes-edges";
+export * from "./utils/node-utils";
+
 // Local helper function to calculate enum length that can handle null dataType
 export const calculateEnumLength = (column: SchemaTable["columns"][number]) => {
   if (!column.dataType) return 0;

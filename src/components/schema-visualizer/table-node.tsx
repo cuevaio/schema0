@@ -25,20 +25,23 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { SchemaTable } from "@/lib/db/types";
 import { getBadgeColor } from "@/lib/schema-utils";
 import { cn } from "@/lib/utils";
 import { MAX_ENUM_LENGTH_DESKTOP, MAX_ENUM_LENGTH_MOBILE } from "./constants";
 import { TABLE_NODE_ROW_HEIGHT, TABLE_NODE_WIDTH } from "./layout-utils";
 import { calculateEnumLength, getDisplayType } from "./utils";
+import type { TableNodeData } from "./utils/highlight-nodes-edges";
 
 const DBTableNode = ({
-  data: { name, columns },
+  data: { name, columns, isHighlighted, isActiveHighlighted },
   targetPosition,
   sourcePosition,
-}: Node<SchemaTable>) => {
-  const hiddenNodeConnector =
-    "!h-px !w-px !min-w-0 !min-h-0 !cursor-grab !border-0 !opacity-0";
+}: Node<TableNodeData>) => {
+  const getConnectorClasses = (isVisible: boolean) =>
+    cn(
+      "!h-px !w-px !min-w-0 !min-h-0 !cursor-grab !border-0 transition-opacity duration-300",
+      isVisible ? "!opacity-100" : "!opacity-0",
+    );
 
   const [openDrawer, setOpenDrawer] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -64,12 +67,34 @@ const DBTableNode = ({
     setOpenDrawer(null);
   };
 
+  const tableWrapperClasses = cn(
+    "text-card-foreground transition-all duration-500 ease-out rounded-lg relative",
+    {
+      "ring-2 shadow-lg": isHighlighted,
+      "ring-4 shadow-xl": isActiveHighlighted,
+    },
+  );
+
+  const ringStyle =
+    isHighlighted || isActiveHighlighted
+      ? {
+          boxShadow: `
+      0 0 0 ${isActiveHighlighted ? "4px" : "2px"} #00D9FF,
+      0 0 20px #00D9FF60,
+      0 0 40px #1DD8A630,
+      0 4px 25px -5px rgba(0, 0, 0, 0.25)
+    `,
+        }
+      : {};
+
   return (
     <div
-      className="text-card-foreground"
+      className={tableWrapperClasses}
       style={{
         width: (TABLE_NODE_WIDTH / 2) * 0.75,
+        ...ringStyle,
       }}
+      data-table-highlighted={isHighlighted || isActiveHighlighted}
     >
       <div
         className="flex items-center gap-2 overflow-hidden rounded-t-lg border-x border-t bg-background px-2"
@@ -83,7 +108,15 @@ const DBTableNode = ({
       {columns.map((column) => (
         <div
           key={column.name}
-          className="relative flex items-center justify-between border-x border-t bg-muted px-3 last:rounded-b last:border-b"
+          className={cn(
+            "relative flex items-center justify-between border-x border-t bg-muted px-3 transition-all duration-200 last:rounded-b last:border-b",
+            {
+              "bg-primary/10":
+                (isHighlighted || isActiveHighlighted) &&
+                (column.isPrimaryKey || column.isForeignKey),
+              "hover:bg-primary/5": isHighlighted || isActiveHighlighted,
+            },
+          )}
           style={{
             height: (TABLE_NODE_ROW_HEIGHT / 2) * 0.75,
           }}
@@ -130,6 +163,7 @@ const DBTableNode = ({
 
           {/* Right side: Data type + Additional constraints */}
           <div className="flex flex-shrink-0 items-center gap-2">
+            <div className="table-column-type">{getDisplayType(column)}</div>
             {/* Data type */}
             <div className="flex items-center gap-1">
               {column.defaultValue && (
@@ -274,7 +308,12 @@ const DBTableNode = ({
               type="target"
               // biome-ignore lint/style/noNonNullAssertion: It's not null
               position={targetPosition!}
-              className={cn(hiddenNodeConnector, "!left-0")}
+              className={cn(
+                getConnectorClasses(
+                  Boolean(isHighlighted || isActiveHighlighted),
+                ),
+                "!left-0",
+              )}
             />
           )}
           {column.isForeignKey && (
@@ -284,7 +323,12 @@ const DBTableNode = ({
               type="source"
               // biome-ignore lint/style/noNonNullAssertion: It's not null
               position={sourcePosition!}
-              className={cn(hiddenNodeConnector, "!right-0")}
+              className={cn(
+                getConnectorClasses(
+                  Boolean(isHighlighted || isActiveHighlighted),
+                ),
+                "!right-0",
+              )}
             />
           )}
         </div>
