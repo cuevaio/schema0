@@ -1,15 +1,13 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { getDBClient } from "./get-db-client";
 import { selectColumns, selectColumnsConstrains, selectRelations } from "./sql";
 import type { SchemaTable } from "./types";
 
 export async function getDBSchema(connectionString: string, schema: string) {
-  const sqlClient = neon(connectionString);
-  const db = drizzle(sqlClient);
+  const db = getDBClient(connectionString);
 
   const _columns = await db.execute(selectColumns(schema));
 
-  const columns = (Array.isArray(_columns) ? _columns : _columns.rows) as {
+  const columns = _columns as unknown as {
     table_name: string;
     column_name: string;
     data_type: string;
@@ -22,11 +20,7 @@ export async function getDBSchema(connectionString: string, schema: string) {
 
   const _columnConstrains = await db.execute(selectColumnsConstrains(schema));
 
-  const columnConstrains = (
-    Array.isArray(_columnConstrains)
-      ? _columnConstrains
-      : _columnConstrains.rows
-  ) as {
+  const columnConstrains = _columnConstrains as unknown as {
     table_name: string;
     column_name: string;
     constraint_type: string;
@@ -34,9 +28,7 @@ export async function getDBSchema(connectionString: string, schema: string) {
 
   const _relations = await db.execute(selectRelations(schema));
 
-  const relations = (
-    Array.isArray(_relations) ? _relations : _relations.rows
-  ) as {
+  const relations = _relations as unknown as {
     referencing_table: string;
     referencing_column: string;
     referenced_table: string;

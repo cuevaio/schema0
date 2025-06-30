@@ -1,11 +1,10 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { getDBClient } from "./get-db-client";
 import { selectDatabaseName } from "./sql";
 
 export async function getDBName(connectionString: string) {
-  const sqlClient = neon(connectionString);
-  const db = drizzle(sqlClient);
+  const db = getDBClient(connectionString);
 
   const name = await db.execute(selectDatabaseName);
-  return name.rows[0].current_database as string;
+
+  return name[0].current_database as string;
 }

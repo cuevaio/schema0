@@ -20,8 +20,6 @@ export async function GET(request: Request) {
       : eq(database.userId, userId),
   });
 
-  console.log(databases);
-
   const result = databases.map((db) => ({
     id: db.id,
     name: db.name,
