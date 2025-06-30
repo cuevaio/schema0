@@ -70,7 +70,6 @@ export async function uploadDatabaseAction(
       id,
       name: dbName,
       description: "Uploaded database",
-      schemas: schemasWithTables,
       encryptedSchemas: encryptSchemas(schemasWithTables),
       userId: isAnonymous ? undefined : userId,
       anonymousUserId: isAnonymous ? userId : undefined,

@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { getUserId } from "@/auth";
 import { database, db } from "@/database";
-import { encryptSchemas } from "@/lib/encryption";
+import { decryptSchemas, encryptSchemas } from "@/lib/encryption";
 
 export type UpdateDatabaseNameActionState = {
   input: {
@@ -78,14 +78,11 @@ export async function updateDatabaseNameAction(
       .update(database)
       .set({
         name: newDatabaseName,
-        schemas: dbRecord.schemas.map((s) =>
-          s.name === currentSchemaName ? { ...s, name: newSchemaName } : s,
-        ),
         encryptedSchemas: encryptSchemas(
-          dbRecord.schemas.map((s) =>
+          decryptSchemas(dbRecord.encryptedSchemas).map((s) =>
             s.name === currentSchemaName ? { ...s, name: newSchemaName } : s,
           ),
-        ),
+        ).toString(),
       })
       .where(eq(database.id, databaseId));
 
