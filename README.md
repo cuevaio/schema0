@@ -2,7 +2,10 @@
 
 A modern, interactive database schema visualization tool built with Next.js, React Flow, and Drizzle ORM. Schema0 allows you to upload your PostgreSQL databases and visualize their structure with an intuitive, interactive interface.
 
-![Schema0 Demo](public/demo.mp4)
+<video width="100%" controls>
+  <source src="public/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## ✨ Features
 
