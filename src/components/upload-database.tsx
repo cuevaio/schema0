@@ -66,23 +66,46 @@ export function UploadDatabase() {
         <DialogHeader>
           <DialogTitle>Add Database</DialogTitle>
           <DialogDescription>
-            Enter your database connection string to add a new database to your
-            account
+            Enter your database connection URL to add a new database to your
+            account. We support PostgreSQL databases through pooled connections.
           </DialogDescription>
         </DialogHeader>
         <form id="add-database-form" action={formAction} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="connectionString">Connection String</Label>
+            <Label htmlFor="connectionString">Connection URL</Label>
             <Input
               id="connectionString"
               name="connectionString"
               type="text"
-              placeholder="postgresql://user:password@localhost:5432/database"
+              placeholder="postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/dbname"
               required
               disabled={isPending}
             />
           </div>
         </form>
+        <p className="text-xs">
+          Just in case if you’re not familiar with database connection URL
+          concept:
+        </p>
+        <pre className="max-w-full overflow-x-auto text-xs">{`postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/dbname
+             └──┘ └───────┘ └─────────────────────────────────────────────┘ └────┘
+              ʌ    ʌ          ʌ                                              ʌ
+        role -│    │          │- hostname                                    │- database
+                   │
+                   │- password
+
+`}</pre>
+        <p className="text-xs">
+          More on{" "}
+          <a
+            href="https://orm.drizzle.team/docs/connect-overview#database-connection-url"
+            target="_blank"
+            rel="noopener"
+            className="underline"
+          >
+            Drizzle Docs
+          </a>
+        </p>
         <DialogFooter>
           <div className="grid w-full grid-cols-2 gap-2">
             <DialogClose asChild>

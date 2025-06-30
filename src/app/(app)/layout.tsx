@@ -49,7 +49,7 @@ export default function DatabaseLayout({
           href="https://cueva.io"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:underline"
+          className="underline"
         >
           cueva.io
         </a>
