@@ -27,9 +27,8 @@ import {
 } from "@/components/ui/tooltip";
 import { getBadgeColor } from "@/lib/schema-utils";
 import { cn } from "@/lib/utils";
-import { MAX_ENUM_LENGTH_DESKTOP, MAX_ENUM_LENGTH_MOBILE } from "./constants";
 import { TABLE_NODE_ROW_HEIGHT, TABLE_NODE_WIDTH } from "./layout-utils";
-import { calculateEnumLength, getDisplayType } from "./utils";
+import { getDisplayType } from "./utils";
 import type { TableNodeData } from "./utils/highlight-nodes-edges";
 
 const DBTableNode = ({
@@ -44,11 +43,11 @@ const DBTableNode = ({
     );
 
   const [openDrawer, setOpenDrawer] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [_isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
+      setIsMobile(window.innerWidth <= 768);
     };
 
     handleResize();
@@ -65,6 +64,28 @@ const DBTableNode = ({
 
   const closeDialog = () => {
     setOpenDrawer(null);
+  };
+
+  // Helper function to determine if enum should be collapsed based on value count and estimated width
+  const shouldCollapseEnum = (column: (typeof columns)[0]) => {
+    if (!column.dataType?.includes("|")) return false;
+
+    const enumValues = column.dataType.split("|");
+    const valueCount = enumValues.length;
+
+    // Always collapse if more than 3 values to prevent overflow
+    if (valueCount > 3) return true;
+
+    // For 2-3 values, check if any individual value is too long
+    const hasLongValues = enumValues.some((value) => value.length > 8);
+    if (hasLongValues) return true;
+
+    // Calculate estimated width: each badge is roughly value.length * 8px + 24px padding
+    const estimatedWidth = enumValues.reduce(
+      (sum, value) => sum + value.length * 8 + 32,
+      0,
+    );
+    return estimatedWidth > 120; // Leave room for other UI elements
   };
 
   const tableWrapperClasses = cn(
@@ -122,7 +143,7 @@ const DBTableNode = ({
           }}
         >
           {/* Left side: Icons + Column name */}
-          <div className="flex min-w-0 flex-1 items-center gap-2">
+          <div className="flex min-w-0 flex-1 items-center gap-2 pr-2">
             {/* Constraint icons */}
             <div className="flex flex-shrink-0 items-center gap-1">
               {column.isPrimaryKey && (
@@ -158,14 +179,15 @@ const DBTableNode = ({
             </div>
 
             {/* Column name */}
-            <div className="truncate font-semibold text-xs">{column.name}</div>
+            <div className="flex-1 truncate font-semibold text-xs">
+              {column.name}
+            </div>
           </div>
 
           {/* Right side: Data type + Additional constraints */}
-          <div className="flex flex-shrink-0 items-center gap-2">
-            <div className="table-column-type">{getDisplayType(column)}</div>
+          <div className="flex max-w-[45%] flex-shrink-0 items-center gap-2">
             {/* Data type */}
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center justify-end gap-1">
               {column.defaultValue && (
                 <Tooltip>
                   <TooltipTrigger>
@@ -176,11 +198,10 @@ const DBTableNode = ({
                   </TooltipContent>
                 </Tooltip>
               )}
+
+              {/* Enum handling with improved overflow logic */}
               {column.dataType?.includes("|") ? (
-                calculateEnumLength(column) >
-                (isMobile
-                  ? MAX_ENUM_LENGTH_MOBILE
-                  : MAX_ENUM_LENGTH_DESKTOP) ? (
+                shouldCollapseEnum(column) ? (
                   <>
                     {/* Drawer trigger for mobile */}
                     <div className="flex md:hidden">
@@ -189,7 +210,7 @@ const DBTableNode = ({
                         onClick={() => openDialog(column.name)}
                         className={cn(
                           getBadgeColor("enum-raw"),
-                          "cursor-pointer text-xs",
+                          "cursor-pointer whitespace-nowrap text-xs",
                         )}
                       >
                         <span className="mr-1">
@@ -206,7 +227,7 @@ const DBTableNode = ({
                             variant="outline"
                             className={cn(
                               getBadgeColor("enum-raw"),
-                              "cursor-pointer text-xs",
+                              "cursor-pointer whitespace-nowrap text-xs",
                             )}
                           >
                             <span className="mr-1">
@@ -215,7 +236,7 @@ const DBTableNode = ({
                             <InfoIcon className="size-3" />
                           </Badge>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-md border bg-background">
+                        <TooltipContent className="max-w-md border bg-background p-3">
                           <div className="flex flex-wrap gap-2">
                             {column.dataType.split("|").map((type) => (
                               <Badge
@@ -229,26 +250,31 @@ const DBTableNode = ({
                                   <CircleIcon className="size-3" />
                                 )}
                               </Badge>
-                            ))}{" "}
+                            ))}
                           </div>
                         </TooltipContent>
                       </Tooltip>
                     </div>
                   </>
                 ) : (
-                  column.dataType.split("|").map((type) => (
-                    <Badge
-                      key={type}
-                      variant="outline"
-                      className={cn(getBadgeColor("enum-value"), "text-xs")}
-                    >
-                      {type.replace(" ", "").length !== 0 ? (
-                        type
-                      ) : (
-                        <CircleIcon className="size-3" />
-                      )}
-                    </Badge>
-                  ))
+                  <div className="flex flex-wrap justify-end gap-1">
+                    {column.dataType.split("|").map((type) => (
+                      <Badge
+                        key={type}
+                        variant="outline"
+                        className={cn(
+                          getBadgeColor("enum-value"),
+                          "whitespace-nowrap text-xs",
+                        )}
+                      >
+                        {type.replace(" ", "").length !== 0 ? (
+                          type
+                        ) : (
+                          <CircleIcon className="size-3" />
+                        )}
+                      </Badge>
+                    ))}
+                  </div>
                 )
               ) : (
                 <Badge
@@ -257,7 +283,7 @@ const DBTableNode = ({
                     getBadgeColor(
                       column.dataType || column.udtName || "unknown",
                     ),
-                    "text-xs",
+                    "whitespace-nowrap text-xs",
                   )}
                 >
                   {getDisplayType(column)}
@@ -266,7 +292,7 @@ const DBTableNode = ({
             </div>
 
             {/* Additional constraint icons */}
-            <div className="flex items-center gap-1">
+            <div className="flex flex-shrink-0 items-center gap-1">
               {column.isUnique &&
                 (column.isPrimaryKey || column.isForeignKey) && (
                   <Tooltip>
