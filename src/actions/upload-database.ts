@@ -10,6 +10,8 @@ import { nanoid } from "@/lib/nanoid";
 export type UploadDatabaseActionState = {
   input: {
     connectionString?: string;
+    jsonSchema?: string;
+    importMethod?: "connection" | "json";
   };
   output:
     | {
@@ -30,15 +32,78 @@ export async function uploadDatabaseAction(
   formData: FormData,
 ): Promise<UploadDatabaseActionState> {
   const connectionString = formData.get("connectionString") as string;
+  const jsonSchema = formData.get("jsonSchema") as string;
+  const importMethod = formData.get("importMethod") as "connection" | "json";
 
   const state: UploadDatabaseActionState = {
     input: {
       connectionString,
+      jsonSchema,
+      importMethod,
     },
     output: {
       success: false,
     },
   };
+
+  if (importMethod === "json") {
+    if (!jsonSchema?.trim()) {
+      state.output = {
+        success: false,
+        error: "JSON schema is required",
+      };
+      return state;
+    }
+
+    try {
+      const parsedSchema = JSON.parse(jsonSchema);
+
+      if (!parsedSchema.tables || !Array.isArray(parsedSchema.tables)) {
+        state.output = {
+          success: false,
+          error: "Invalid schema format: missing tables array",
+        };
+        return state;
+      }
+
+      const { userId, isAnonymous } = await getUserId(await headers());
+      const id = nanoid();
+
+      const schemasWithTables = [
+        {
+          name: "public",
+          tables: parsedSchema.tables,
+          relations: parsedSchema.relations || [],
+        },
+      ];
+
+      await db.insert(database).values({
+        id,
+        name: "Imported Database",
+        description: "Database imported from JSON schema",
+        encryptedSchemas: encryptSchemas(schemasWithTables),
+        userId: isAnonymous ? undefined : userId,
+        anonymousUserId: isAnonymous ? userId : undefined,
+      } satisfies DatabaseInsert);
+
+      state.output = {
+        success: true,
+        data: {
+          id,
+          firstSchema: "public",
+        },
+      };
+    } catch (error) {
+      state.output = {
+        success: false,
+        error:
+          error instanceof Error
+            ? `Invalid JSON: ${error.message}`
+            : "Invalid JSON format",
+      };
+    }
+    return state;
+  }
 
   if (!connectionString) {
     state.output = {
