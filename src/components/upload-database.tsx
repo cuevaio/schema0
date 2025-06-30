@@ -76,7 +76,7 @@ export function UploadDatabase() {
             <Input
               id="connectionString"
               name="connectionString"
-              type="text"
+              type="password"
               placeholder="postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/dbname"
               required
               disabled={isPending}
