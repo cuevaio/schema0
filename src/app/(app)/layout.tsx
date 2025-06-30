@@ -53,14 +53,23 @@ export default function DatabaseLayout({
       </div>
       {children}
       <p className="mt-8 text-center text-muted-foreground text-sm">
-        made with ❤️ by cursor and{" "}
+        Made by{" "}
+        <a
+          href="https://github.com/camilocbarrera"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          Cristian(🇨🇴)
+        </a>{" "}
+        and{" "}
         <a
           href="https://cueva.io"
           target="_blank"
           rel="noopener noreferrer"
           className="underline"
         >
-          cueva.io
+          Anthony(🇵🇪)
         </a>
       </p>
     </div>
