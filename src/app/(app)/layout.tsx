@@ -1,3 +1,4 @@
+import { LinkedinIcon } from "lucide-react";
 import Link from "next/link";
 import { DatabaseSchemaSelector } from "@/components/database-schema-selector";
 import { buttonVariants } from "@/components/ui/button";
@@ -28,6 +29,14 @@ export default function DatabaseLayout({
           <UploadDatabase />
         </div>
         <div className="flex items-center gap-4">
+          <a
+            href="https://www.linkedin.com/posts/cuevaio_announcing-schema-zero-schema0vercelapp-activity-7345272311815544832-FTJq/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "ghost", size: "icon" })}
+          >
+            <LinkedinIcon className="size-4 text-muted-foreground" />
+          </a>
           <a
             href="https://github.com/cuevaio/schema0"
             target="_blank"
