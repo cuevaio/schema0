@@ -1,0 +1,139 @@
+/* Enhanced hover effects for schema visualizer */
+[data-table-highlighted="true"] {
+  transform: scale(1.05);
+  z-index: 100;
+  filter: drop-shadow(0 0 20px #00D9FF40);
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  0% {
+    filter: drop-shadow(0 0 20px #00D9FF40) drop-shadow(0 0 40px #1DD8A610);
+  }
+  100% {
+    filter: drop-shadow(0 0 25px #00D9FF60) drop-shadow(0 0 50px #1DD8A620);
+  }
+}
+
+[data-table-highlighted="true"] .table-column-type {
+  opacity: 1;
+  transition: opacity 400ms ease-in-out;
+  color: #00D9FF;
+  text-shadow: 0 0 8px #00D9FF80;
+}
+
+.table-column-type {
+  opacity: 0;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: normal;
+  text-align: right;
+  transition: opacity 400ms ease-in-out, color 400ms ease-in-out;
+}
+
+/* Enhanced edge animations */
+.react-flow__edge.highlighted {
+  stroke: #00D9FF;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 8px #00D9FF80) drop-shadow(0 0 16px #1DD8A640);
+  animation: edge-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes edge-glow {
+  0% {
+    stroke-width: 2.5px;
+    filter: drop-shadow(0 0 6px #00D9FF60) drop-shadow(0 0 12px #1DD8A630);
+  }
+  100% {
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 10px #00D9FF90) drop-shadow(0 0 20px #1DD8A650);
+  }
+}
+
+/* Enhanced node connectors */
+.react-flow__handle {
+  border: 3px solid #00D9FF;
+  background: radial-gradient(circle, #00D9FF20, #1DD8A610);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 0 0 #00D9FF80;
+}
+
+[data-table-highlighted="true"] .react-flow__handle {
+  opacity: 1;
+  transform: scale(1.2);
+  animation: handle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes handle-pulse {
+  0% {
+    box-shadow: 0 0 0 0 #00D9FF80;
+  }
+  70% {
+    box-shadow: 0 0 0 6px #00D9FF00;
+  }
+  100% {
+    box-shadow: 0 0 0 0 #00D9FF00;
+  }
+}
+
+/* Background enhancements */
+.react-flow__background {
+  background-color: hsl(var(--background));
+}
+
+/* Smooth transitions for all elements */
+.react-flow__node {
+  transition: transform 200ms ease-in-out;
+}
+
+.react-flow__edge {
+  transition: stroke 300ms ease-in-out, stroke-width 300ms ease-in-out;
+}
+
+/* Table header glow effect */
+[data-table-highlighted="true"] .bg-background {
+  background: linear-gradient(135deg, #00D9FF10, #1DD8A608, #4A9EFF05);
+  animation: header-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes header-shimmer {
+  0%, 100% {
+    background: linear-gradient(135deg, #00D9FF10, #1DD8A608, #4A9EFF05);
+  }
+  50% {
+    background: linear-gradient(135deg, #1DD8A615, #00D9FF10, #4A9EFF08);
+  }
+}
+
+/* Enhanced column highlighting */
+[data-table-highlighted="true"] .bg-muted {
+  background: linear-gradient(90deg, #00D9FF05, transparent, #1DD8A603) !important;
+  transition: background 600ms ease-in-out;
+}
+
+/* Particle trail effect for better visibility */
+.react-flow__edge path {
+  stroke-dasharray: 0;
+  stroke-dashoffset: 0;
+}
+
+[data-table-highlighted="true"] + .react-flow__edge path {
+  animation: dash-flow 4s linear infinite;
+}
+
+@keyframes dash-flow {
+  0% {
+    stroke-dasharray: 5, 5;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dasharray: 5, 5;
+    stroke-dashoffset: -10;
+  }
+} 

@@ -19,14 +19,20 @@ export const getLayoutedElements = (
   dagreGraph.setGraph({
     rankdir: "LR",
     align: "UR",
-    nodesep: 25,
-    ranksep: 50,
+    nodesep: 40,
+    ranksep: 80,
+    marginx: 20,
+    marginy: 20,
   });
 
   nodes.forEach((node) => {
+    const scaledWidth = (TABLE_NODE_WIDTH / 2) * 0.75;
+    const scaledRowHeight = (TABLE_NODE_ROW_HEIGHT / 2) * 0.75;
+    const nodeHeight = scaledRowHeight * (node.data.columns.length + 1); // columns + header
+
     dagreGraph.setNode(node.id, {
-      width: TABLE_NODE_WIDTH / 2,
-      height: (TABLE_NODE_ROW_HEIGHT / 2) * (node.data.columns.length + 1), // columns + header
+      width: scaledWidth,
+      height: nodeHeight,
     });
   });
 
