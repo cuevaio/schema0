@@ -288,6 +288,28 @@ export function UploadDatabase() {
               <p className="text-muted-foreground text-xs">
                 Direct database connection for real-time schema import.
               </p>
+              <p className="text-xs">
+                Just in case if you're not familiar with database connection URL
+                concept:
+              </p>
+              <pre className="max-w-full overflow-x-auto text-xs">{`postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/dbname
+             └──┘ └───────┘ └─────────────────────────────────────────────┘ └────┘
+              ʌ    ʌ          ʌ                                              ʌ
+        role -│    │          │- hostname                                    │- database
+                   │
+                   │- password
+`}</pre>
+              <p className="text-xs">
+                More on{" "}
+                <a
+                  href="https://orm.drizzle.team/docs/connect-overview#database-connection-url"
+                  target="_blank"
+                  rel="noopener"
+                  className="underline"
+                >
+                  Drizzle Docs
+                </a>
+              </p>
             </div>
           )}
         </form>
