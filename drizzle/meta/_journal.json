@@ -29,6 +29,20 @@
       "when": 1751226989453,
       "tag": "0003_lumpy_colleen_wing",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1751240797896,
+      "tag": "0004_curly_yellow_claw",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1751243805967,
+      "tag": "0005_vengeful_exodus",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "database" DROP COLUMN "schemas";

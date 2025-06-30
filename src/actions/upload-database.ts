@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { getUserId } from "@/auth";
 import { type DatabaseInsert, database, db } from "@/database";
 import { getDBName, getDBSchema, getDBSchemas } from "@/lib/db";
+import { encryptSchemas } from "@/lib/encryption";
 import { nanoid } from "@/lib/nanoid";
 
 export type UploadDatabaseActionState = {
@@ -70,6 +71,7 @@ export async function uploadDatabaseAction(
       name: dbName,
       description: "Uploaded database",
       schemas: schemasWithTables,
+      encryptedSchemas: encryptSchemas(schemasWithTables),
       userId: isAnonymous ? undefined : userId,
       anonymousUserId: isAnonymous ? userId : undefined,
     } satisfies DatabaseInsert);

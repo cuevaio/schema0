@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getUserId } from "@/auth";
 import { db } from "@/database";
 import { database } from "@/database/schema/database";
+import { decryptSchemas } from "@/lib/encryption";
 
 export type Database = {
   id: string;
@@ -19,10 +20,14 @@ export async function GET(request: Request) {
       : eq(database.userId, userId),
   });
 
+  console.log(databases);
+
   const result = databases.map((db) => ({
     id: db.id,
     name: db.name,
-    schemas: db.schemas.map((schema) => schema.name),
+    schemas: decryptSchemas(db.encryptedSchemas.toString()).map(
+      (schema) => schema.name,
+    ),
   }));
 
   return NextResponse.json(result);

@@ -1,0 +1,1 @@
+ALTER TABLE "database" ADD COLUMN "encrypted_schemas" text DEFAULT '[]' NOT NULL;

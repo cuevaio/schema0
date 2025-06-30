@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { SchemaVisualizer } from "@/components/schema-visualizer";
 import { db } from "@/database";
 import { database } from "@/database/schema/database";
+import { decryptSchemas } from "@/lib/encryption";
 
 export default async function DatabasePage({
   params,
@@ -19,7 +20,9 @@ export default async function DatabasePage({
     notFound();
   }
 
-  const schemaRecord = dbRecord.schemas.find((s) => s.name === schema);
+  const schemas = decryptSchemas(dbRecord.encryptedSchemas);
+
+  const schemaRecord = schemas.find((s) => s.name === schema);
 
   if (!schemaRecord) {
     notFound();

@@ -1,4 +1,4 @@
-import { jsonb, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import type { SchemaRelation, SchemaTable } from "@/lib/db/types";
 import { user } from "./auth";
 
@@ -17,7 +17,7 @@ export const database = pgTable("database", {
   name: text("name").notNull(),
   description: text("description").notNull(),
 
-  schemas: jsonb("schemas").array().notNull().default([]).$type<Schema[]>(),
+  encryptedSchemas: text("encrypted_schemas").notNull().default("[]"),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
